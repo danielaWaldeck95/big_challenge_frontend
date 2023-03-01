@@ -1,6 +1,7 @@
 import { useState } from "react";
-import AuthHeading from "@/components/AuthHeading";
 import Link from "next/link";
+
+import AuthHeading from "@/components/AuthHeading";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -8,41 +9,39 @@ function LoginForm() {
   return (
     <>
       <form>
-        <div className="w-1/3 mx-auto">
-          <div className="flex flex-col space-y-4 mb-6">
-            <label className="text-gray-700 text-sm">Email</label>
+        <div className="mx-auto w-1/3">
+          <div className="mb-6 flex flex-col space-y-4">
+            <label className="text-sm text-gray-700">Email</label>
             <input
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              className="bg-white appearance-none border border-gray-300 rounded w-full py-2 px-3 leading-tight focus:outline-none"
+              className="w-full appearance-none rounded border border-gray-300 bg-white py-2 px-3 leading-tight focus:outline-none"
               id="email"
               type="email"
             />
 
-            <label className="text-gray-700 text-sm">Password</label>
+            <label className="text-sm text-gray-700">Password</label>
             <input
               value={password}
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
-              className="bg-white appearance-none border border-gray-300 rounded w-full py-2 px-3 mb-3 leading-tight focus:outline-none"
+              className="mb-3 w-full appearance-none rounded border border-gray-300 bg-white py-2 px-3 leading-tight focus:outline-none"
               id="password"
               type="password"
             />
           </div>
           <div className="flex flex-col items-center justify-between space-y-6">
             <button
-              className="text-white bg-blue-600 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none w-full"
+              className="w-full rounded bg-blue-600 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none"
               type="submit"
             >
               Log In
             </button>
             <div className="flex items-center space-x-2">
-              <p className="text-gray-500 text-base">
-                Dont have an account yet?
-              </p>
+              <p className="text-base text-gray-500">Dont have an account yet?</p>
               <Link
                 className="text-sm text-blue-600 hover:text-blue-700"
                 href="/auth/register"
@@ -59,7 +58,7 @@ function LoginForm() {
 
 export default function Auth() {
   return (
-    <div className="min-h-screen mx-auto items-center flex flex-col justify-center">
+    <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
         <AuthHeading text={"Log in to access unique features"} />
         <LoginForm />
