@@ -1,8 +1,8 @@
-export default function Heading({text}: {text: string}) {
-    return (
-        <div className="text-center mb-10">
-            <div className="text-3xl font-semibold mb-4">Welcome to the doctor’s app</div>
-            <p className="text-base text-gray-900">{text}</p>
-        </div>
-    )
-}   
+export default function Heading({ text }: { text: string }) {
+  return (
+    <div className="mb-10 text-center">
+      <div className="mb-4 text-3xl font-semibold">Welcome to the doctor’s app</div>
+      <p className="text-base text-gray-900">{text}</p>
+    </div>
+  );
+}

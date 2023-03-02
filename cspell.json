@@ -1,0 +1,4 @@
+{
+  "ignorePaths": ["node_modules", "package.json", "postcss.config.js", "tailwind.config.js"],
+  "words": ["callout", "Dont", "vercel"]
+}
