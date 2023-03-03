@@ -1,5 +1,7 @@
 import { useState } from "react";
+import axios from "axios";
 import Link from "next/link";
+import Router from "next/router";
 
 import AuthHeading from "@/components/AuthHeading";
 import BaseButton from "@/components/base/BaseButton";
@@ -17,11 +19,21 @@ export default function Auth() {
     }));
   };
 
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    await axios.get("http://localhost/sanctum/csrf-cookie").then(() => {
+      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, inputValue).then((response) => {
+        const token = response.data;
+        Router.push("/");
+      });
+    });
+  };
+
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
         <AuthHeading text={"Log in to access unique features"} />
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mx-auto w-1/3">
             <div className="mb-6 flex flex-col space-y-4">
               <InputField
