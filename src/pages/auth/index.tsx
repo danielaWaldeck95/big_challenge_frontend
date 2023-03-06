@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Router from "next/router";
@@ -6,8 +6,17 @@ import Router from "next/router";
 import AuthHeading from "@/components/AuthHeading";
 import BaseButton from "@/components/base/BaseButton";
 import InputField from "@/components/base/InputField";
+import { useStore } from "../store/store";
 
 export default function Auth() {
+  const getCSRFCookie = async () => {
+    await axios.get("http://localhost/sanctum/csrf-cookie");
+  };
+
+  useEffect(() => {
+    getCSRFCookie();
+  }, []);
+
   const [inputValue, setInputValue] = useState({ email: "", password: "" });
   const { email, password } = inputValue;
 
@@ -19,13 +28,13 @@ export default function Auth() {
     }));
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    await axios.get("http://localhost/sanctum/csrf-cookie").then(() => {
-      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, inputValue).then((response) => {
-        const token = response.data;
-        Router.push("/");
-      });
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, inputValue).then((response) => {
+      // set token value
+      const token = response.data;
+      useStore.setState({ token });
+      Router.push("/");
     });
   };
 
