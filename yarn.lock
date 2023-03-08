@@ -359,6 +359,39 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.35.0.tgz"
   integrity sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==
 
+"@fortawesome/fontawesome-common-types@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.npmjs.org/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.3.0.tgz"
+  integrity sha512-4BC1NMoacEBzSXRwKjZ/X/gmnbp/HU5Qqat7E8xqorUtBFZS+bwfGH5/wqOC2K6GV0rgEobp3OjGRMa5fK9pFg==
+
+"@fortawesome/fontawesome-svg-core@^6.3.0", "@fortawesome/fontawesome-svg-core@~1 || ~6":
+  version "6.3.0"
+  resolved "https://registry.npmjs.org/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.3.0.tgz"
+  integrity sha512-uz9YifyKlixV6AcKlOX8WNdtF7l6nakGyLYxYaCa823bEBqyj/U2ssqtctO38itNEwXb8/lMzjdoJ+aaJuOdrw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/free-regular-svg-icons@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.npmjs.org/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.3.0.tgz"
+  integrity sha512-cZnwiVHZ51SVzWHOaNCIA+u9wevZjCuAGSvSYpNlm6A4H4Vhwh8481Bf/5rwheIC3fFKlgXxLKaw8Xeroz8Ntg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/free-solid-svg-icons@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.npmjs.org/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.3.0.tgz"
+  integrity sha512-x5tMwzF2lTH8pyv8yeZRodItP2IVlzzmBuD1M7BjawWgg9XAvktqJJ91Qjgoaf8qJpHQ8FEU9VxRfOkLhh86QA==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/react-fontawesome@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/@fortawesome/react-fontawesome/-/react-fontawesome-0.2.0.tgz"
+  integrity sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==
+  dependencies:
+    prop-types "^15.8.1"
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.11.8.tgz"
@@ -926,6 +959,11 @@ client-only@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/client-only/-/client-only-0.0.1.tgz"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
+
+clsx@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/clsx/-/clsx-1.2.1.tgz"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -2879,7 +2917,7 @@ quick-lru@^5.1.1:
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-react-dom@^18.2.0, react-dom@18.2.0:
+"react-dom@^16.0.0 || ^17.0.0 || ^18.0.0", react-dom@^18.2.0, react-dom@>=16, react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -2892,7 +2930,19 @@ react-is@^16.13.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-"react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", react@>=16.8, react@18.2.0:
+react-spinners@^0.13.8:
+  version "0.13.8"
+  resolved "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.8.tgz"
+  integrity sha512-3e+k56lUkPj0vb5NDXPVFAOkPC//XyhKPJjvcGjyMNPWsBKpplfeyialP74G7H7+It7KzhtET+MvGqbKgAqpZA==
+
+react-toastify@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-9.1.1.tgz"
+  integrity sha512-pkFCla1z3ve045qvjEmn2xOJOy4ZciwRXm1oMPULVkELi5aJdHCN/FHnuqXq8IwGDLB7PPk2/J6uP9D8ejuiRw==
+  dependencies:
+    clsx "^1.1.1"
+
+"react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", react@>=16, react@>=16.3, react@>=16.8, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
