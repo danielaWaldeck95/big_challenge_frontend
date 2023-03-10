@@ -9,98 +9,125 @@ import BaseButton from "@/components/base/BaseButton";
 import InputField from "@/components/base/InputField";
 import { useStore } from "../store/store";
 
+interface IErrors {
+  emailErrors: string[];
+  passwordErrors: string[];
+  submitError: string;
+}
+interface IFormValues {
+  email: string;
+  password: string;
+}
+
+interface IResponse {
+  message: string;
+  token: string;
+}
+
 const getCSRFCookie = async () => {
   await axios.get(`${process.env.NEXT_PUBLIC_HOST}/sanctum/csrf-cookie`);
 };
+
+const login = (formValues: IFormValues) =>
+  axios.post<IResponse>(`${process.env.NEXT_PUBLIC_API_URL}/login`, formValues);
 
 export default function Auth() {
   useEffect(() => {
     getCSRFCookie();
   }, []);
 
-  const [inputValue, setInputValue] = useState({ email: "", password: "" });
-  const { email, password } = inputValue;
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({ emailError: "", passwordError: "", submitError: "" });
-  const { emailError, passwordError, submitError } = errors;
-  const isEmailValid = () => {
-    if (email === "") {
-      setErrors((prev) => ({ ...prev, emailError: "Cannot be empty" }));
-      return false;
-    }
-    const lastAtPos = email.lastIndexOf("@");
-    const lastDotPos = email.lastIndexOf(".");
+  const [formValues, setFormValues] = useState({ email: "", password: "" });
+  const { email, password } = formValues;
+  const [errors, setErrors] = useState<IErrors>({
+    emailErrors: [],
+    passwordErrors: [],
+    submitError: "",
+  });
+  const { emailErrors, passwordErrors, submitError } = errors;
 
-    if (
-      !(
-        lastAtPos < lastDotPos &&
-        lastAtPos > 0 &&
-        email.indexOf("@@") === -1 &&
-        lastDotPos > 2 &&
-        email.length - lastDotPos > 2
-      )
-    ) {
-      setErrors((prev) => ({ ...prev, emailError: "Please write a valid email" }));
-      return false;
-    }
-    return true;
-  };
-  const isPasswordValid = () => {
-    if (!/^(?=.{8,})/.test(password)) {
-      setErrors((prev) => ({
-        ...prev,
-        passwordError: "Password must have at least 8 characters",
-      }));
-      return false;
-    }
-    if (!/^(?=.*?[A-Z])/.test(password)) {
-      setErrors((prev) => ({
-        ...prev,
-        passwordError: "Password must include at least one uppercase",
-      }));
-      return false;
-    }
-    if (!/^(?=.*[a-z])/.test(password)) {
-      setErrors((prev) => ({
-        ...prev,
-        passwordError: "Password must include at least one lowercase",
-      }));
-      return false;
-    }
+  const resetKey = (prevState: IErrors, keyToReset: string) => ({
+    ...prevState,
+    [keyToReset]: [],
+  });
 
-    if (!/^(?=.*\W)/.test(password)) {
+  const isEmailValid = (emailValue: string) => {
+    setErrors((prevState) => resetKey(prevState, "emailErrors"));
+    if (!/^([\w-.]+@([\w-]+\.)+[\w-]{2,4})$/.test(emailValue)) {
       setErrors((prev) => ({
         ...prev,
-        passwordError: "Password must include at least one special character",
+        emailErrors: [...prev.emailErrors, "Please write a valid email"],
       }));
       return false;
     }
     return true;
   };
-  const formIsValid = () => isEmailValid() && isPasswordValid();
+
+  const isPasswordValid = (passwordValue: string) => {
+    setErrors((prevState) => resetKey(prevState, "passwordErrors"));
+    let isValid = true;
+    if (passwordValue.length < 8) {
+      setErrors((prev) => ({
+        ...prev,
+        passwordErrors: [...prev.passwordErrors, "At least 8 characters"],
+      }));
+      isValid = false;
+    }
+    if (!/^(?=.*?[A-Z])/.test(passwordValue)) {
+      setErrors((prev) => ({
+        ...prev,
+        passwordErrors: [...prev.passwordErrors, "At least one uppercase"],
+      }));
+      isValid = false;
+    }
+    if (!/^(?=.*[a-z])/.test(passwordValue)) {
+      setErrors((prev) => ({
+        ...prev,
+        passwordErrors: [...prev.passwordErrors, "At least one lowercase"],
+      }));
+      isValid = false;
+    }
+
+    if (!/^(?=.*\W)/.test(passwordValue)) {
+      setErrors((prev) => ({
+        ...prev,
+        passwordErrors: [...prev.passwordErrors, "At least one special character"],
+      }));
+      isValid = false;
+    }
+    return isValid;
+  };
+
+  const formIsValid = () => {
+    const isEmailValidResult = isEmailValid(email);
+    const isPasswordValidResult = isPasswordValid(password);
+    return isEmailValidResult && isPasswordValidResult;
+  };
+
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
         <AuthHeading text={"Log in to access unique features"} />
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            setErrors({ emailError: "", passwordError: "", submitError: "" });
+            setHasSubmitted(true);
+            setErrors({ emailErrors: [], passwordErrors: [], submitError: "" });
             if (formIsValid()) {
               setIsLoading(true);
-              axios
-                .post(`${process.env.NEXT_PUBLIC_API_URL}/login`, inputValue)
-                .then((response) => {
-                  const token = response.data;
-                  useStore.setState({ token });
-                  Router.push("/");
-                  toast.success("Successful login!", {
-                    hideProgressBar: true,
-                    position: toast.POSITION.BOTTOM_RIGHT,
-                  });
-                })
-                .catch((err) => {
-                  if (err.response) {
+              try {
+                const response = await login(formValues);
+                const { message, token } = response.data;
+                useStore.setState({ token });
+                Router.push("/");
+                toast.success(message, {
+                  hideProgressBar: true,
+                  position: toast.POSITION.BOTTOM_RIGHT,
+                });
+              } catch (error) {
+                if (axios.isAxiosError(error)) {
+                  if (error.response) {
                     setErrors((prev) => ({
                       ...prev,
                       submitError: "Wrong email or password",
@@ -108,13 +135,12 @@ export default function Auth() {
                   } else {
                     setErrors((prev) => ({
                       ...prev,
-                      submitError: "Something went wrong, try again later.",
+                      submitError: "Woops! Something went wrong, try again later.",
                     }));
                   }
-                })
-                .finally(() => {
-                  setIsLoading(false);
-                });
+                }
+              }
+              setIsLoading(false);
             }
           }}
         >
@@ -125,23 +151,29 @@ export default function Auth() {
                 value={email}
                 label="Email"
                 name="email"
-                onChange={(e) => setInputValue((prev) => ({ ...prev, email: e.target.value }))}
-                error={emailError}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFormValues((prev) => ({ ...prev, email: value }));
+                  if (hasSubmitted) isEmailValid(value);
+                }}
+                errors={emailErrors}
               />
               <InputField
                 type="password"
                 value={password}
                 label="Password"
                 name="password"
-                onChange={(e) =>
-                  setInputValue((prev) => ({ ...prev, password: e.target.value }))
-                }
-                error={passwordError}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFormValues((prev) => ({ ...prev, password: value }));
+                  if (hasSubmitted) isPasswordValid(value);
+                }}
+                errors={passwordErrors}
               />
               {submitError && <div className="text-xs text-red-500">{submitError}</div>}
             </div>
             <div className="flex flex-col items-center justify-between space-y-6">
-              <BaseButton text={"Log in"} isLoading={isLoading} />
+              <BaseButton text={"Log in"} isLoading={isLoading} disabled={isLoading} />
               <div className="flex items-center space-x-2">
                 <p className="text-base text-gray-500">Dont have an account yet?</p>
                 <Link

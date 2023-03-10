@@ -1,53 +1,44 @@
 import { useState } from "react";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
-type InputFieldProps = {
-  error?: string;
+interface IInputFieldProps {
+  errors?: string[];
   label?: string;
   name: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type: string;
   value: string;
-};
+}
 
 export default function InputField({
-  error,
+  errors,
   label,
   name,
   onChange,
   placeholder,
   type,
   value,
-}: InputFieldProps): JSX.Element {
+}: IInputFieldProps): JSX.Element {
   const [inputType, setInputType] = useState<string>(type);
-  const handleShowPassword = () => {
-    if (type === inputType) {
-      setInputType("text");
-    } else {
-      setInputType("password");
-    }
-  };
+  const handleShowPassword = () =>
+    inputType === "password" ? setInputType("text") : setInputType("password");
 
-  let eyeButtonIcon: IconProp = { ...faEye };
-  let eyeButton;
-  if (value && type === "password") {
-    if (inputType === "text") {
-      eyeButtonIcon = { ...faEye };
-    } else if (inputType === "password") {
-      eyeButtonIcon = { ...faEyeSlash };
-    }
-
-    eyeButton = (
-      <FontAwesomeIcon
-        className="cursor-pointer text-blue-600 hover:text-blue-700"
-        onClick={handleShowPassword}
-        icon={eyeButtonIcon}
-      />
+  const eyeIcon =
+    inputType === "password" ? (
+      <EyeIcon onClick={handleShowPassword} className="h-6 w-6 text-blue-500" />
+    ) : (
+      <EyeSlashIcon onClick={handleShowPassword} className="h-6 w-6 text-blue-500" />
     );
-  }
+
+  const listErrors =
+    errors &&
+    errors.map((error) => (
+      <div className="text-xs text-red-500" key={error}>
+        {error}
+      </div>
+    ));
+
   return (
     <div className="flex flex-col space-y-4">
       {label && (
@@ -65,9 +56,9 @@ export default function InputField({
             placeholder={placeholder}
             onChange={onChange}
           />
-          {eyeButton}
+          {value && type === "password" && eyeIcon}
         </div>
-        {error && <div className="text-xs text-red-500">{error}</div>}
+        {listErrors}
       </div>
     </div>
   );

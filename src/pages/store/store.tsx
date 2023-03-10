@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface StoreState {
+interface IStoreState {
   setToken(token: string): void;
   token: string;
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export const useStore = create<StoreState>()(
+export const useStore = create<IStoreState>()(
   persist(
     (set) => ({
       setToken: (token: string): void => set({ token }),

@@ -1,27 +1,20 @@
-import ClipLoader from "react-spinners/ClipLoader";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
-type ButtonProps = {
+interface IButtonProps {
+  disabled?: boolean;
   isLoading?: boolean;
   text: string;
-};
+}
 
-export default function BaseButton({ isLoading, text }: ButtonProps) {
+export default function BaseButton({ disabled, isLoading, text }: IButtonProps) {
   return (
     <button
-      disabled={isLoading}
+      disabled={disabled}
       className="flex w-full items-center justify-center rounded bg-blue-600 py-2 px-4 font-bold text-white hover:bg-blue-700 focus:outline-none disabled:bg-blue-400"
       type="submit"
     >
       {text}
-      {isLoading && (
-        <ClipLoader
-          className="ml-4"
-          size={20}
-          color={"#FFFFFF"}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      )}
+      {isLoading && <ArrowPathIcon className="ml-4 h-5 animate-spin" />}
     </button>
   );
 }

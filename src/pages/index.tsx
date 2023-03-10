@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Router from "next/router";
 
 import { useStore } from "./store/store";
 
+interface IUser {
+  name: string;
+}
+
+const getUser = async () => {
+  const { token } = useStore.getState();
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  return axios.get<IUser>(`${process.env.NEXT_PUBLIC_API_URL}/user`);
+};
+
 export default function Home() {
-  interface IUser {
-    name: string;
-  }
-
-  const { token } = useStore();
-
   const [user, setUser] = useState<IUser>();
 
-  const getUser = async () => {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user`).then((response) => {
-      setUser(response.data);
-    });
-  };
   useEffect(() => {
-    getUser();
+    getUser()
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        Router.push("/auth");
+      });
   }, []);
 
   return (
