@@ -19,19 +19,14 @@ interface ILoginResponse {
   token: string;
 }
 
-export const getCSRFCookie = async () => {
-  await axios.get(`${process.env.NEXT_PUBLIC_HOST}/sanctum/csrf-cookie`);
+export const getCSRFCookie = () => {
+  axios.get(`${process.env.NEXT_PUBLIC_HOST}/sanctum/csrf-cookie`);
 };
 
-export const login = (formValues: LoginUser) =>
+export const login = (loginUser: LoginUser) =>
   axios
-    .post<ILoginResponse>(`${process.env.NEXT_PUBLIC_API_URL}/login`, formValues)
+    .post<ILoginResponse>(`${process.env.NEXT_PUBLIC_API_URL}/login`, loginUser)
     .then(({ data }) => data);
 
-export const signUp = async (data: NewUser) => {
-  const { data: response } = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/signup`,
-    data,
-  );
-  return response.data;
-};
+export const signUp = (newUser: NewUser) =>
+  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, newUser).then(({ data }) => data);

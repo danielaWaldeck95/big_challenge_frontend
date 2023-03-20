@@ -4,8 +4,8 @@ import Link from "next/link";
 import Router from "next/router";
 
 import AuthHeading from "@/components/AuthHeading";
-import BaseButton from "@/components/base/BaseButton";
-import Input from "@/components/base/Input";
+import BaseButton from "@/components/shared/BaseButton";
+import Input from "@/components/shared/Input";
 import showToast from "@/utils/showToast";
 import { getCSRFCookie, login } from "../api";
 import { useStore } from "../store/store";
@@ -149,6 +149,7 @@ export default function Auth() {
                 value={password}
                 label="Password"
                 name="password"
+                showPassword={true}
                 onChange={(e) => {
                   setErrors((prev) => ({
                     ...prev,
