@@ -1,28 +1,24 @@
-import { useState } from "react";
+import React, { forwardRef, InputHTMLAttributes, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
-interface IInputFieldProps {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
   errors?: string[];
-  label?: string;
-  name: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: React.ReactNode;
+  name?: string;
   placeholder?: string;
   type: string;
-  value: string;
+  value?: string;
 }
 
-export default function InputField({
-  errors,
-  label,
-  name,
-  onChange,
-  placeholder,
-  type,
-  value,
-}: IInputFieldProps): JSX.Element {
+function Input(
+  { error, errors, label, name, placeholder, type, ...props }: InputProps,
+  ref: React.ForwardedRef<HTMLInputElement>,
+) {
   const [inputType, setInputType] = useState<string>(type);
+
   const handleShowPassword = () =>
-    inputType === "password" ? setInputType("text") : setInputType("password");
+    setInputType(inputType === "password" ? "text" : "password");
 
   const eyeIcon =
     inputType === "password" ? (
@@ -33,9 +29,9 @@ export default function InputField({
 
   const listErrors =
     errors &&
-    errors.map((error) => (
-      <div className="text-xs text-red-500" key={error}>
-        {error}
+    errors.map((err) => (
+      <div className="text-xs text-red-500" key={err}>
+        {err}
       </div>
     ));
 
@@ -47,19 +43,26 @@ export default function InputField({
         </label>
       )}
       <div>
-        <div className="flex w-full items-center space-x-4 rounded border border-gray-300 bg-white  py-2 px-3 leading-tight">
+        <div
+          className={`flex w-full items-center space-x-4 rounded border border-gray-300 bg-white  py-2 px-3 leading-tight  ${
+            error && "border-red-500"
+          }`}
+        >
           <input
+            {...props}
+            ref={ref}
             type={inputType}
-            value={value}
             name={name}
             className="w-full appearance-none focus:outline-none"
             placeholder={placeholder}
-            onChange={onChange}
           />
-          {value && type === "password" && eyeIcon}
+          {type === "password" && eyeIcon}
         </div>
+        {error && <div className="text-xs text-red-500">{error}</div>}
         {listErrors}
       </div>
     </div>
   );
 }
+
+export default forwardRef(Input);

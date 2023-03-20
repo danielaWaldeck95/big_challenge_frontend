@@ -1,60 +1,114 @@
-import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { z } from "zod";
 
 import AuthHeading from "@/components/AuthHeading";
-import BaseButton from "@/components/base/BaseButton";
-import InputField from "@/components/base/InputField";
+import BaseButton from "@/components/shared/BaseButton";
+import Input from "@/components/shared/Input";
+import showToast from "@/utils/showToast";
+import { signUp } from "../api";
 
-export default function Auth() {
-  const [formValues, setForm] = useState({
-    email: "",
-    name: "",
-    password: "",
-    passwordConfirmation: "",
-    userType: "doctor",
+const UserTypes = ["doctor", "patient"];
+const validationSchema = z
+  .object({
+    email: z.string().min(1, { message: "Email is required" }).email({
+      message: "Must be a valid email",
+    }),
+    name: z.string().min(2, { message: "Name is required" }),
+    password: z
+      .string()
+      .min(8, { message: "At least 8 characters" })
+      .regex(/^(?=.*?[A-Z])/, { message: "At least one uppercase" })
+      .regex(/^(?=.*?[a-z])/, { message: "At least one lowercase" })
+      .regex(/^(?=.*\W)/, { message: "At least one special character" }),
+    passwordConfirmation: z.string().min(1, { message: "Confirm Password is required" }),
+    userType: z.string().refine((val) => UserTypes.includes(val)),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
   });
-  const { email, name, password, passwordConfirmation, userType } = formValues;
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    const { name: inputName, value: inputValue } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [inputName]: inputValue,
-    }));
+
+type FormValues = z.infer<typeof validationSchema>;
+
+const getRegisterData = (data: FormValues) => ({
+  email: data.email,
+  name: data.name,
+  password: data.password,
+  password_confirmation: data.passwordConfirmation,
+  user_type: data.userType.toUpperCase(),
+});
+
+export default function Register() {
+  const router = useRouter();
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm<FormValues>({
+    defaultValues: { userType: "doctor" },
+    resolver: zodResolver(validationSchema),
+    reValidateMode: "onChange",
+  });
+
+  const { isLoading, mutate } = useMutation({
+    mutationFn: signUp,
+    onError: (e) => showToast({ error: e, source: "registerUser", type: "error" }),
+    onSuccess: () => {
+      router.push("/auth");
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    mutate(getRegisterData(data));
   };
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
         <AuthHeading text={"Sign up to access unique features"} />
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto w-2/3">
-            <div className="mb-6 grid items-center gap-6 md:grid-cols-2">
-              <InputField
-                type="text"
-                value={name}
-                label="Name"
+            <div className="mb-6 grid items-start gap-6 md:grid-cols-2">
+              <Input
+                {...register("name")}
+                id={"name"}
                 name="name"
-                onChange={handleChange}
+                label="Name"
+                error={errors.name?.message}
+                type="text"
+                disabled={isLoading}
               />
-              <InputField
-                type="email"
-                value={email}
-                label="Email"
+              <Input
+                {...register("email")}
+                id={"email"}
                 name="email"
-                onChange={handleChange}
+                label="Email"
+                error={errors.email?.message}
+                type="email"
+                disabled={isLoading}
               />
-              <InputField
-                type="password"
-                value={password}
+              <Input
+                {...register("password")}
                 label="Password"
                 name="password"
-                onChange={handleChange}
-              />
-              <InputField
+                error={errors.password?.message}
                 type="password"
-                value={passwordConfirmation}
-                label="Repeat Password"
+                id={"password"}
+                showPassword={true}
+                disabled={isLoading}
+              />
+              <Input
+                {...register("passwordConfirmation")}
                 name="passwordConfirmation"
-                onChange={handleChange}
+                error={errors.passwordConfirmation?.message}
+                type="password"
+                id={"passwordConfirmation"}
+                label="Repeat Password"
+                showPassword={true}
+                disabled={isLoading}
               />
             </div>
             <div className="mb-6">
@@ -67,12 +121,12 @@ export default function Auth() {
               >
                 <div className="flex w-full items-center py-2 px-3">
                   <input
-                    checked={userType === "doctor"}
-                    onChange={handleChange}
-                    id="doctor"
+                    {...register("userType")}
+                    disabled={isLoading}
                     type="radio"
-                    value="doctor"
                     name="userType"
+                    value="doctor"
+                    id="doctor"
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
                   />
                   <label htmlFor="doctor" className="ml-2 text-sm font-medium">
@@ -81,12 +135,12 @@ export default function Auth() {
                 </div>
                 <div className="flex w-full items-center border-l border-gray-300 py-2 px-3">
                   <input
-                    checked={userType === "patient"}
-                    onChange={handleChange}
-                    id="patient"
+                    {...register("userType")}
+                    disabled={isLoading}
                     type="radio"
-                    value="patient"
                     name="userType"
+                    value="patient"
+                    id="patient"
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
                   />
                   <label htmlFor="patient" className="ml-2 text-sm font-medium">
@@ -96,7 +150,7 @@ export default function Auth() {
               </div>
             </div>
             <div className="flex flex-col items-center justify-between space-y-6">
-              <BaseButton text={"Sign up"} />
+              <BaseButton text={"Sign up"} isLoading={isLoading} disabled={isLoading} />
 
               <div className="flex items-center space-x-2">
                 <p className="text-base text-gray-500">Already have an account?</p>
