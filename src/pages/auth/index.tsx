@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import axios from "axios";
 import Link from "next/link";
 import Router from "next/router";
 
 import AuthHeading from "@/components/AuthHeading";
 import BaseButton from "@/components/base/BaseButton";
-import InputField from "@/components/base/InputField";
+import Input from "@/components/base/Input";
+import showToast from "@/utils/showToast";
+import { getCSRFCookie, login } from "../api";
 import { useStore } from "../store/store";
 
 interface IErrors {
@@ -14,22 +15,6 @@ interface IErrors {
   passwordErrors: string[];
   submitError: string;
 }
-interface IFormValues {
-  email: string;
-  password: string;
-}
-
-interface IResponse {
-  message: string;
-  token: string;
-}
-
-const getCSRFCookie = async () => {
-  await axios.get(`${process.env.NEXT_PUBLIC_HOST}/sanctum/csrf-cookie`);
-};
-
-const login = (formValues: IFormValues) =>
-  axios.post<IResponse>(`${process.env.NEXT_PUBLIC_API_URL}/login`, formValues);
 
 export default function Auth() {
   useEffect(() => {
@@ -117,14 +102,11 @@ export default function Auth() {
             if (formIsValid()) {
               setIsLoading(true);
               try {
-                const response = await login(formValues);
-                const { message, token } = response.data;
+                const data = await login(formValues);
+                const { message, token } = data;
                 useStore.setState({ token });
                 Router.push("/");
-                toast.success(message, {
-                  hideProgressBar: true,
-                  position: toast.POSITION.BOTTOM_RIGHT,
-                });
+                showToast({ message, type: "success" });
               } catch (error) {
                 if (axios.isAxiosError(error)) {
                   if (error.response) {
@@ -146,24 +128,32 @@ export default function Auth() {
         >
           <div className="mx-auto w-1/3">
             <div className="mb-6 flex flex-col space-y-4">
-              <InputField
+              <Input
                 type="text"
                 value={email}
                 label="Email"
                 name="email"
                 onChange={(e) => {
+                  setErrors((prev) => ({
+                    ...prev,
+                    submitError: "",
+                  }));
                   const { value } = e.target;
                   setFormValues((prev) => ({ ...prev, email: value }));
                   if (hasSubmitted) isEmailValid(value);
                 }}
                 errors={emailErrors}
               />
-              <InputField
+              <Input
                 type="password"
                 value={password}
                 label="Password"
                 name="password"
                 onChange={(e) => {
+                  setErrors((prev) => ({
+                    ...prev,
+                    submitError: "",
+                  }));
                   const { value } = e.target;
                   setFormValues((prev) => ({ ...prev, password: value }));
                   if (hasSubmitted) isPasswordValid(value);
