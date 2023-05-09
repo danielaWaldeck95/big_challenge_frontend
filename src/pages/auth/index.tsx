@@ -103,8 +103,9 @@ export default function Auth() {
               setIsLoading(true);
               try {
                 const data = await login(formValues);
-                const { message, token } = data;
+                const { message, token, user } = data;
                 useStore.setState({ token });
+                useStore.setState({ user });
                 Router.push("/");
                 showToast({ message, type: "success" });
               } catch (error) {
@@ -149,7 +150,6 @@ export default function Auth() {
                 value={password}
                 label="Password"
                 name="password"
-                showPassword={true}
                 onChange={(e) => {
                   setErrors((prev) => ({
                     ...prev,

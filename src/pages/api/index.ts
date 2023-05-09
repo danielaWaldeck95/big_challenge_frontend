@@ -17,6 +17,7 @@ export type LoginUser = {
 interface ILoginResponse {
   message: string;
   token: string;
+  user: IUser;
 }
 
 export const getCSRFCookie = () => {
@@ -30,3 +31,10 @@ export const login = (loginUser: LoginUser) =>
 
 export const signUp = (newUser: NewUser) =>
   axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, newUser).then(({ data }) => data);
+
+export const logout = async (token: string) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {}, { headers });
+};
