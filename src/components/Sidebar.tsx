@@ -20,6 +20,10 @@ export default function Sidebar() {
     },
   });
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <div className="fixed inset-y-0 z-50 flex w-72 flex-col">
       <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-gray-800 px-6 text-gray-300">
@@ -32,7 +36,7 @@ export default function Sidebar() {
               selected={selected === "Menu"}
               onClick={() => setSelected("Menu")}
             />
-            {user && user.role.includes("PATIENT") && (
+            {user.role.includes("PATIENT") && (
               <NavItem
                 name="New Submission"
                 href="/#"
@@ -41,7 +45,7 @@ export default function Sidebar() {
                 onClick={() => setSelected("New Submission")}
               />
             )}
-            {user && user.role.includes("DOCTOR") && (
+            {user.role.includes("DOCTOR") && (
               <NavItem
                 name="Task History"
                 href="/#"
@@ -54,10 +58,10 @@ export default function Sidebar() {
             <li className="-mx-6 mt-auto bg-gray-700 text-white">
               <div className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6">
                 <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-400 p-3">
-                  <span>{user?.name.charAt(0).toUpperCase()}</span>
+                  <span>{user.name.charAt(0).toUpperCase()}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span aria-hidden="true">{user?.name}</span>
+                  <span aria-hidden="true">{user.name}</span>
                   <span
                     className="cursor-pointer text-xs text-gray-300"
                     onClick={() => mutate(token)}
