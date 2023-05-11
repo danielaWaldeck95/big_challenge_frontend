@@ -10,7 +10,7 @@ function createHeaders(token: string) {
 export type UserType = {
   name: string;
   role: string;
-  weight?: BigInteger;
+  weight?: number;
 };
 
 export type NewUser = {
