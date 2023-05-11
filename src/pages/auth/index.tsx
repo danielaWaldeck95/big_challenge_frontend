@@ -3,12 +3,12 @@ import axios from "axios";
 import Link from "next/link";
 import Router from "next/router";
 
-import AuthHeading from "@/components/AuthHeading";
-import BaseButton from "@/components/shared/BaseButton";
-import Input from "@/components/shared/Input";
-import showToast from "@/utils/showToast";
-import { getCSRFCookie, login } from "../api";
-import { useStore } from "../store/store";
+import { getCSRFCookie, login } from "~/api/api";
+import AuthHeading from "~/components/AuthHeading";
+import BaseButton from "~/components/BaseButton";
+import Input from "~/components/Input";
+import { useStore } from "~/store/store";
+import showToast from "~/utils/showToast";
 
 interface IErrors {
   emailErrors: string[];
