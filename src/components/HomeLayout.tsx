@@ -1,6 +1,6 @@
-import Sidebar from "../shared/sidebar";
+import Sidebar from "./Sidebar";
 
-export const HomeLayout = (props: { children: React.ReactNode }) => (
+export const HomeLayout = (props: { children?: React.ReactNode }) => (
   <>
     <Sidebar />
     <main className="py-10 lg:pl-72">

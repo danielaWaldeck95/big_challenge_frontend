@@ -3,9 +3,9 @@ import { useMutation } from "react-query";
 import { HomeIcon, InboxIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import Router from "next/router";
 
-import { logout } from "@/pages/api";
-import { useStore } from "@/pages/store/store";
-import NavItem from "./NavItem";
+import { logout } from "~/api/api";
+import NavItem from "~/components/NavItem";
+import { useStore } from "~/store/store";
 
 export default function Sidebar() {
   const { setToken, setUser, token, user } = useStore();
