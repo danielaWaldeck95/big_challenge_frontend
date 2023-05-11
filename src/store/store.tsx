@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { UserType } from "~/api/api";
+
 interface IStoreState {
   setToken(token: string): void;
-  setUser(user: IUser | undefined): void;
+  setUser(user?: UserType): void;
 
   token: string;
-  user: IUser | undefined;
+  user?: UserType;
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -14,7 +16,7 @@ export const useStore = create<IStoreState>()(
   persist(
     (set) => ({
       setToken: (token: string) => set({ token }),
-      setUser: (user: IUser | undefined) => set({ user }),
+      setUser: (user?: UserType) => set({ user }),
       token: "",
       user: undefined,
     }),
