@@ -167,10 +167,7 @@ export default function Auth() {
               <BaseButton text={"Log in"} isLoading={isLoading} disabled={isLoading} />
               <div className="flex items-center space-x-2">
                 <p className="text-base text-gray-500">Dont have an account yet?</p>
-                <Link
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                  href="/auth/register"
-                >
+                <Link className="text-sm text-blue-600 hover:text-blue-700" href="/register">
                   Sign up{" "}
                 </Link>
               </div>
