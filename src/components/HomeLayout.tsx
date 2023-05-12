@@ -1,4 +1,4 @@
-import Sidebar from "./Sidebar";
+import { Sidebar } from "./Sidebar";
 
 export const HomeLayout = (props: { children?: React.ReactNode }) => (
   <>
@@ -8,4 +8,3 @@ export const HomeLayout = (props: { children?: React.ReactNode }) => (
     </main>
   </>
 );
-export default HomeLayout;

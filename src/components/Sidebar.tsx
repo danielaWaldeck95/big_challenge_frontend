@@ -3,11 +3,12 @@ import { useMutation } from "react-query";
 import { HomeIcon, InboxIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import Router from "next/router";
 
+import { NavItem } from "./NavItem";
+
 import { logout } from "~/api/api";
-import NavItem from "~/components/NavItem";
 import { useStore } from "~/store/store";
 
-export default function Sidebar() {
+export function Sidebar() {
   const { setToken, setUser, token, user } = useStore();
   const [selected, setSelected] = useState("Menu");
 

@@ -6,7 +6,7 @@ interface ButtonProps {
   text: string;
 }
 
-export default function BaseButton({ disabled, isLoading, text }: ButtonProps) {
+export function BaseButton({ disabled, isLoading, text }: ButtonProps) {
   return (
     <button
       disabled={disabled}
