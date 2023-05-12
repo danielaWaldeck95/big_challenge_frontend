@@ -4,11 +4,11 @@ import Link from "next/link";
 import Router from "next/router";
 
 import { getCSRFCookie, login } from "~/api/api";
-import AuthHeading from "~/components/AuthHeading";
-import BaseButton from "~/components/BaseButton";
+import { AuthHeader } from "~/components/AuthHeading";
+import { BaseButton } from "~/components/BaseButton";
 import Input from "~/components/Input";
 import { useStore } from "~/store/store";
-import showToast from "~/utils/showToast";
+import { showToast } from "~/utils/showToast";
 
 interface IErrors {
   emailErrors: string[];
@@ -93,7 +93,7 @@ export default function Auth() {
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
-        <AuthHeading text={"Log in to access unique features"} />
+        <AuthHeader text={"Log in to access unique features"} />
         <form
           onSubmit={async (e) => {
             e.preventDefault();
