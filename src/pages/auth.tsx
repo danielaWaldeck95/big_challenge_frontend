@@ -93,7 +93,7 @@ export default function Auth() {
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
-        <AuthHeader text={"Log in to access unique features"} />
+        <AuthHeader text="Log in to access unique features" />
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -168,7 +168,7 @@ export default function Auth() {
               <div className="flex items-center space-x-2">
                 <p className="text-base text-gray-500">Dont have an account yet?</p>
                 <Link className="text-sm text-blue-600 hover:text-blue-700" href="/register">
-                  Sign up{" "}
+                  Sign up
                 </Link>
               </div>
             </div>
