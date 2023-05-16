@@ -50,6 +50,8 @@
         ]
       }
     ],
+    "import/order": "off",
+    "import/prefer-default-export": "off",
     "sort-destructure-keys/sort-destructure-keys": 2,
     "sort-keys": "error",
     "space-before-blocks": "off",

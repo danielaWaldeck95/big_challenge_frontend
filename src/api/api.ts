@@ -1,6 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import axios from "axios";
 
+function createHeaders(token: string) {
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+export type UserType = {
+  name: string;
+  role: string;
+  weight?: number;
+};
+
 export type NewUser = {
   email: string;
   name: string;
@@ -17,6 +29,7 @@ export type LoginUser = {
 interface ILoginResponse {
   message: string;
   token: string;
+  user: UserType;
 }
 
 export const getCSRFCookie = () => {
@@ -30,3 +43,8 @@ export const login = (loginUser: LoginUser) =>
 
 export const signUp = (newUser: NewUser) =>
   axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, newUser).then(({ data }) => data);
+
+export const logout = async (token: string) => {
+  const headers = createHeaders(token);
+  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {}, { headers });
+};

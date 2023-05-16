@@ -8,7 +8,7 @@ type ToastProps = {
   type: "success" | "error";
 };
 
-export default function showToast({
+export function showToast({
   error,
   message = "",
   source = "A backend endpoint",

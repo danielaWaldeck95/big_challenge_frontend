@@ -3,12 +3,12 @@ import axios from "axios";
 import Link from "next/link";
 import Router from "next/router";
 
-import AuthHeading from "@/components/AuthHeading";
-import BaseButton from "@/components/shared/BaseButton";
-import Input from "@/components/shared/Input";
-import showToast from "@/utils/showToast";
-import { getCSRFCookie, login } from "../api";
-import { useStore } from "../store/store";
+import { getCSRFCookie, login } from "~/api/api";
+import { AuthHeader } from "~/components/AuthHeading";
+import { BaseButton } from "~/components/BaseButton";
+import Input from "~/components/Input";
+import { useStore } from "~/store/store";
+import { showToast } from "~/utils/showToast";
 
 interface IErrors {
   emailErrors: string[];
@@ -93,7 +93,7 @@ export default function Auth() {
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
-        <AuthHeading text={"Log in to access unique features"} />
+        <AuthHeader text="Log in to access unique features" />
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -103,8 +103,9 @@ export default function Auth() {
               setIsLoading(true);
               try {
                 const data = await login(formValues);
-                const { message, token } = data;
+                const { message, token, user } = data;
                 useStore.setState({ token });
+                useStore.setState({ user });
                 Router.push("/");
                 showToast({ message, type: "success" });
               } catch (error) {
@@ -149,7 +150,6 @@ export default function Auth() {
                 value={password}
                 label="Password"
                 name="password"
-                showPassword={true}
                 onChange={(e) => {
                   setErrors((prev) => ({
                     ...prev,
@@ -167,11 +167,8 @@ export default function Auth() {
               <BaseButton text={"Log in"} isLoading={isLoading} disabled={isLoading} />
               <div className="flex items-center space-x-2">
                 <p className="text-base text-gray-500">Dont have an account yet?</p>
-                <Link
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                  href="/auth/register"
-                >
-                  Sign up{" "}
+                <Link className="text-sm text-blue-600 hover:text-blue-700" href="/register">
+                  Sign up
                 </Link>
               </div>
             </div>

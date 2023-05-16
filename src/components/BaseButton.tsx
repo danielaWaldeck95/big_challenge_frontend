@@ -1,12 +1,12 @@
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
-interface IButtonProps {
+interface ButtonProps {
   disabled?: boolean;
   isLoading?: boolean;
   text: string;
 }
 
-export default function BaseButton({ disabled, isLoading, text }: IButtonProps) {
+export function BaseButton({ disabled, isLoading, text }: ButtonProps) {
   return (
     <button
       disabled={disabled}

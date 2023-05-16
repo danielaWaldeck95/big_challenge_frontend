@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { z } from "zod";
 
-import AuthHeading from "@/components/AuthHeading";
-import BaseButton from "@/components/shared/BaseButton";
-import Input from "@/components/shared/Input";
-import showToast from "@/utils/showToast";
-import { signUp } from "../api";
+import { signUp } from "~/api/api";
+import { AuthHeader } from "~/components/AuthHeading";
+import { BaseButton } from "~/components/BaseButton";
+import Input from "~/components/Input";
+import { showToast } from "~/utils/showToast";
 
 const UserTypes = ["doctor", "patient"];
 const validationSchema = z
@@ -68,7 +68,7 @@ export default function Register() {
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center justify-center">
       <div className="w-2/3">
-        <AuthHeading text={"Sign up to access unique features"} />
+        <AuthHeader text="Sign up to access unique features" />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto w-2/3">
             <div className="mb-6 grid items-start gap-6 md:grid-cols-2">
@@ -97,7 +97,6 @@ export default function Register() {
                 error={errors.password?.message}
                 type="password"
                 id={"password"}
-                showPassword={true}
                 disabled={isLoading}
               />
               <Input
@@ -107,7 +106,6 @@ export default function Register() {
                 type="password"
                 id={"passwordConfirmation"}
                 label="Repeat Password"
-                showPassword={true}
                 disabled={isLoading}
               />
             </div>
