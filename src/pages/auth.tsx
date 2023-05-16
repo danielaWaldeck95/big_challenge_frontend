@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 import { getCSRFCookie, login } from "~/api/api";
 import { AuthHeader } from "~/components/AuthHeading";
@@ -21,6 +21,7 @@ export default function Auth() {
     getCSRFCookie();
   }, []);
 
+  const router = useRouter();
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({ email: "", password: "" });
@@ -104,9 +105,9 @@ export default function Auth() {
               try {
                 const data = await login(formValues);
                 const { message, token, user } = data;
-                useStore.setState({ token });
-                useStore.setState({ user });
-                Router.push("/");
+                useStore.getState().setToken(token);
+                useStore.getState().setUser(user);
+                router.push("/");
                 showToast({ message, type: "success" });
               } catch (error) {
                 if (axios.isAxiosError(error)) {

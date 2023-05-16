@@ -32,30 +32,27 @@ function getRole(role?: string) {
 export const RouteGuard = (props: { children: React.ReactNode }) => {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
-  const { user } = useStore();
-
-  function authCheck(url: string) {
-    const path = url.split("?")[0];
-    const pathToCheck = `/${path.split("/")[1]}`;
-    const role = getRole(user?.role[0]);
-
-    if (containsRole(pathToCheck, role)) {
-      setAuthorized(true);
-    } else {
-      setAuthorized(false);
-      let redirectPath = "/";
-
-      if (role === "GUEST") {
-        redirectPath = "/auth";
-      }
-
-      router.push({
-        pathname: redirectPath,
-      });
-    }
-  }
 
   useEffect(() => {
+    function authCheck(url: string) {
+      const path = url.split("?")[0];
+      const pathToCheck = `/${path.split("/")[1]}`;
+      const role = getRole(useStore.getState().user?.role[0]);
+      if (containsRole(pathToCheck, role)) {
+        setAuthorized(true);
+      } else {
+        setAuthorized(false);
+        let redirectPath = "/";
+
+        if (role === "GUEST") {
+          redirectPath = "/auth";
+        }
+
+        router.push({
+          pathname: redirectPath,
+        });
+      }
+    }
     authCheck(router.asPath);
 
     const hideContent = () => setAuthorized(false);
