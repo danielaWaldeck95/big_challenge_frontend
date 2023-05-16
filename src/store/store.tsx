@@ -11,7 +11,6 @@ interface IStoreState {
   user?: UserType;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const useStore = create<IStoreState>()(
   persist(
     (set) => ({
