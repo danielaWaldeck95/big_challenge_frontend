@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { UserType } from "~/api/api";
+import { UserType } from "~/api/Types";
 
 interface IStoreState {
   setToken(token: string): void;

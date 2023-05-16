@@ -65,7 +65,7 @@ export function Sidebar() {
                   <span aria-hidden="true">{user.name}</span>
                   <span
                     className="cursor-pointer text-xs text-gray-300"
-                    onClick={() => mutate(token)}
+                    onClick={() => mutate()}
                   >
                     Sign out
                   </span>

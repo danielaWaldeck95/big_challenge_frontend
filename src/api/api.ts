@@ -1,17 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import axios from "axios";
 
-function createHeaders(token: string) {
+import { UserType } from "./Types";
+
+import { useStore } from "~/store/store";
+
+function createHeaders() {
   return {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${useStore.getState().token}`,
   };
 }
-
-export type UserType = {
-  name: string;
-  role: string;
-  weight?: number;
-};
 
 export type NewUser = {
   email: string;
@@ -44,7 +42,7 @@ export const login = (loginUser: LoginUser) =>
 export const signUp = (newUser: NewUser) =>
   axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, newUser).then(({ data }) => data);
 
-export const logout = async (token: string) => {
-  const headers = createHeaders(token);
+export const logout = async () => {
+  const headers = createHeaders();
   await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {}, { headers });
 };
